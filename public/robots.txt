@@ -1,0 +1,12 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /account
+Disallow: /checkout
+Disallow: /api/
+
+# Host
+Host: https://festivities.io
+
+# Sitemaps
+Sitemap: https://festivities.io/sitemap.xml
