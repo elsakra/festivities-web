@@ -1,135 +1,188 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Star } from "lucide-react";
+import { motion, useInView } from "framer-motion";
 
 const testimonials = [
   {
-    id: 1,
-    quote:
-      "I've tried Duolingo, Babbel, Rosetta Stone — nothing clicked until Festivities. Actual conversations make all the difference. I ordered my first coffee in Spanish last month and the barista understood me perfectly.",
-    name: "Sarah K.",
+    quote: "I tried Duolingo for two years and never felt confident speaking. After three months with Festivities, I had my first real conversation with my Mexican coworkers. They were shocked.",
+    name: "Alex K.",
+    role: "Software Engineer",
     language: "Spanish",
-    timeUsing: "3 months",
-    initials: "SK",
-    color: "#C4521A",
+    flag: "🇪🇸",
+    rotate: "-1.2deg",
   },
   {
-    id: 2,
-    quote:
-      "The AI remembers what I've said in previous sessions and builds on it. It's not generic — it feels like it actually knows me. My Japanese has improved more in 6 weeks than in 2 years of classroom study.",
-    name: "Marcus T.",
-    language: "Japanese",
-    timeUsing: "6 weeks",
-    initials: "MT",
-    color: "#2D6A6A",
-  },
-  {
-    id: 3,
-    quote:
-      "I'm learning French for a work assignment in Paris. The business conversation practice is exactly what I needed. My colleagues were surprised by how natural I sounded on my first call.",
+    quote: "The AI corrects me mid-conversation without making me feel dumb. It just... flows. I've never learned this fast.",
     name: "Priya M.",
+    role: "Graphic Designer",
     language: "French",
-    timeUsing: "2 months",
-    initials: "PM",
-    color: "#7A4D2D",
+    flag: "🇫🇷",
+    rotate: "1.4deg",
   },
   {
-    id: 4,
-    quote:
-      "As someone with language anxiety, being judged by an AI rather than a human tutor makes it way less stressful to make mistakes. I've made more progress than ever because I'm not afraid to try.",
-    name: "James L.",
-    language: "Korean",
-    timeUsing: "5 weeks",
-    initials: "JL",
-    color: "#2D5A7A",
+    quote: "Japanese has always intimidated me. Festivities broke it down through actual conversations about things I care about — anime, food, travel. Game changer.",
+    name: "Jordan T.",
+    role: "Marketing Manager",
+    language: "Japanese",
+    flag: "🇯🇵",
+    rotate: "-0.8deg",
   },
   {
-    id: 5,
-    quote:
-      "My kids and I are learning Portuguese together before our trip to Brazil. We do sessions separately and compare notes at dinner — it's become a family thing. Worth every penny.",
-    name: "Elena R.",
+    quote: "My grandmother only speaks Portuguese. Six months in and we can actually talk. I cried the first time she said my accent was good.",
+    name: "Marcus R.",
+    role: "Teacher",
     language: "Portuguese",
-    timeUsing: "2 months",
-    initials: "ER",
-    color: "#4A7A2D",
+    flag: "🇧🇷",
+    rotate: "1.1deg",
+  },
+  {
+    quote: "I travel to Germany for work twice a year. Festivities got me from zero to holding meetings in German. My colleagues are still surprised.",
+    name: "Sophie L.",
+    role: "Consultant",
+    language: "German",
+    flag: "🇩🇪",
+    rotate: "-1.5deg",
+  },
+  {
+    quote: "Korean feels natural now. The adaptive pacing kept me exactly where I needed to be — never bored, never overwhelmed.",
+    name: "Min J.",
+    role: "Graduate Student",
+    language: "Korean",
+    flag: "🇰🇷",
+    rotate: "0.9deg",
   },
 ];
 
-function StarRating({ count = 5 }: { count?: number }) {
+function StarRow() {
   return (
-    <div className="flex gap-0.5" aria-label={`${count} out of 5 stars`}>
-      {Array.from({ length: count }).map((_, i) => (
-        <Star key={i} className="h-4 w-4 fill-[var(--color-brand-primary)] text-[var(--color-brand-primary)]" aria-hidden="true" />
+    <div className="flex gap-0.5 mb-3" aria-label="5 out of 5 stars">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="#C4521A" aria-hidden="true">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+        </svg>
       ))}
     </div>
   );
 }
 
-export function TestimonialsSection() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
+function TestimonialCard({
+  t,
+  index,
+}: {
+  t: (typeof testimonials)[0];
+  index: number;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
 
   return (
-    <section
+    <motion.div
       ref={ref}
-      className="py-24 lg:py-32 bg-[var(--color-brand-surface)]"
-      aria-labelledby="testimonials-heading"
+      initial={{ opacity: 0, y: 30 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.55, delay: (index % 3) * 0.1, ease: [0, 0, 0.2, 1] }}
+      style={{ transform: `rotate(${t.rotate})` }}
+      className="break-inside-avoid mb-5"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-4"
-        >
-          <h2
-            id="testimonials-heading"
-            className="text-4xl lg:text-5xl font-bold text-[var(--color-brand-text)] mb-4"
-            style={{ fontFamily: "var(--font-display)" }}
+      <div
+        className="p-6"
+        style={{
+          background: "rgba(255, 252, 248, 0.97)",
+          borderRadius: "20px",
+          boxShadow: "0 4px 24px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.08)",
+        }}
+      >
+        <StarRow />
+        <blockquote className="text-gray-800 text-[14px] leading-relaxed mb-4">
+          &ldquo;{t.quote}&rdquo;
+        </blockquote>
+        <div className="flex items-center gap-2.5">
+          <div
+            className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0"
+            style={{ background: "linear-gradient(135deg, #C4521A, #E8834A)", color: "white" }}
           >
-            Real people. Real fluency.
+            {t.name.charAt(0)}
+          </div>
+          <div>
+            <div className="text-gray-900 text-sm font-semibold">{t.name}</div>
+            <div className="text-gray-400 text-xs">{t.role}</div>
+          </div>
+          <div className="ml-auto text-base" title={`${t.language} learner`}>
+            {t.flag}
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+export function TestimonialsSection() {
+  const headerRef = useRef<HTMLDivElement>(null);
+  const headerInView = useInView(headerRef, { once: true, margin: "-80px" });
+
+  return (
+    <section className="relative overflow-hidden py-24 lg:py-32" style={{ background: "#FAF6F0" }}>
+
+      {/* Central glow */}
+      <div
+        className="absolute inset-0 pointer-events-none flex items-center justify-center"
+        aria-hidden="true"
+      >
+        <div
+          style={{
+            width: "700px",
+            height: "500px",
+            background: "radial-gradient(ellipse, rgba(196,82,26,0.07) 0%, transparent 70%)",
+            filter: "blur(60px)",
+          }}
+        />
+      </div>
+
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <motion.div
+          ref={headerRef}
+          initial={{ opacity: 0, y: 24 }}
+          animate={headerInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, ease: [0, 0, 0.2, 1] }}
+          className="text-center mb-14"
+        >
+          <p className="text-xs font-bold tracking-[0.2em] uppercase text-[#C4521A]/60 mb-4">Learners love it</p>
+          <h2
+            className="font-bold leading-tight"
+            style={{
+              fontFamily: "var(--font-display)",
+              fontSize: "clamp(30px, 3.5vw, 48px)",
+              color: "#1A1714",
+            }}
+          >
+            Real people. Real progress.
+            <br />
+            <span
+              style={{
+                fontStyle: "italic",
+                background: "linear-gradient(135deg, #C4521A 0%, #E8834A 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
+              Real conversations.
+            </span>
           </h2>
-          <p className="text-xl text-[var(--color-brand-text-secondary)]">
-            Don't take our word for it.
-          </p>
         </motion.div>
 
-        {/* Masonry-style grid */}
-        <div className="columns-1 sm:columns-2 lg:columns-3 gap-5 mt-12">
+        {/* Masonry grid */}
+        <div
+          style={{
+            columns: "1",
+            columnGap: "20px",
+          }}
+          className="sm:[columns:2] lg:[columns:3]"
+        >
           {testimonials.map((t, i) => (
-            <motion.div
-              key={t.id}
-              initial={{ opacity: 0, y: 24 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.4, delay: i * 0.08 }}
-              className="break-inside-avoid mb-5"
-            >
-              <blockquote className="bg-white rounded-[var(--radius-xl)] p-6 shadow-sm hover:shadow-md transition-shadow duration-300 border border-[var(--color-brand-border)]">
-                <StarRating />
-                <p className="mt-3 text-[var(--color-brand-text)] leading-relaxed text-sm">
-                  &ldquo;{t.quote}&rdquo;
-                </p>
-                <footer className="mt-4 flex items-center gap-3">
-                  <div
-                    className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0"
-                    style={{ background: t.color }}
-                    aria-hidden="true"
-                  >
-                    {t.initials}
-                  </div>
-                  <div>
-                    <div className="text-sm font-semibold text-[var(--color-brand-text)]">
-                      {t.name}
-                    </div>
-                    <div className="text-xs text-[var(--color-brand-text-secondary)]">
-                      Learning {t.language} · {t.timeUsing}
-                    </div>
-                  </div>
-                </footer>
-              </blockquote>
-            </motion.div>
+            <TestimonialCard key={t.name} t={t} index={i} />
           ))}
         </div>
       </div>
